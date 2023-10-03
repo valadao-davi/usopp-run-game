@@ -1,0 +1,184 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap');
+
+body {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    font-family:'Pixelify Sans', cursive;
+}
+
+.tela {
+    width: 1000px;
+    height: 500px;
+    position: relative;
+    display: flex;
+    margin: auto;
+    border: 2px #333 solid;
+    overflow: hidden;
+    background-image: url(/images/fundo.png);
+    background-size: cover;
+}
+
+.tritao {
+    position: absolute;
+    bottom: 0;
+    transform: scaleX(-1);
+    height: 110px;
+    right: 0;
+}
+
+.usopp {
+    position: absolute;
+    height: 80px;
+    bottom: 0;
+    left: 100px;
+    transform: scaleX(-1);
+}
+
+.vidas{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.vida_cheia {
+    width: 30px;
+}
+.vida_perdida {
+    width: 30px;
+}
+
+.usopp_abatido {
+    margin-left: 21.65px;
+}
+
+.pulo {
+    animation: pulo 750ms linear;
+}
+
+.movimento_tritao {
+    animation: movimento_tritao 2.5s linear infinite;
+}
+
+.hit {
+    animation: hit 325ms steps(5);
+}
+
+.tiro {
+    position: absolute;
+    background-image: url(./images/bala.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 12px;
+    height: 12px;
+}
+
+.municao_items{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    position: absolute;
+    align-items: center;
+    top: 10px;
+    gap: 10px;
+    right: 10px;
+    padding: 8px 20px 8px 10px;
+    background-color: #505050;
+    border-radius: 8px;
+    color: white;
+    font-weight: 700;
+}
+.img_municao{
+    width: 50px;
+    height: 50px;
+}
+.estilingue{
+    bottom: 100px;
+    right: 980px;
+    position: absolute;
+    width: 80px;
+    height: 80px;
+}
+.movimento_estilingue{
+    animation: movimento_estilingue 2.5s linear infinite;
+}
+
+.inimigosMatados { 
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    position: absolute;
+    align-items: center;
+    top: 50px;
+    gap: 10px;
+    left: 10px;
+    padding: 8px 20px 8px 10px;
+    background-color: #505050;
+    border-radius: 8px;
+    color: black;
+    font-weight: 700;
+}
+.img_alvo {
+    width: 50px;
+    height: 50px;
+}
+
+@keyframes pulo {
+    0% {
+        bottom: 0;
+    }
+    40% {
+        bottom: 180px;
+    }
+    50% {
+        bottom: 180px;
+    }
+    60% {
+        bottom: 180px;
+    }
+    100% {
+        bottom: 0;
+    }
+}
+
+@keyframes movimento_tritao {
+    from {
+        right: -65px;
+    }
+    to {
+        right: 1000px;
+    }
+    
+}
+
+@keyframes movimento_estilingue {
+    from{
+        right: -65px;
+    }
+    to{
+        right: 1000px;
+    }
+}
+
+@keyframes hit {
+    0% {
+        filter: invert(100%) sepia(100%) saturate(17%) hue-rotate(240deg) brightness(102%) contrast(100%);
+    }
+    20% {
+        filter: none;
+    }
+    40% {
+        filter: invert(100%) sepia(100%) saturate(17%) hue-rotate(240deg) brightness(102%) contrast(100%);
+    }
+    60% {
+        filter: none;
+    }
+    80% {
+        filter: invert(100%) sepia(100%) saturate(17%) hue-rotate(240deg) brightness(102%) contrast(100%);
+    }
+}
