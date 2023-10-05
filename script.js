@@ -19,6 +19,8 @@ const atingidos = document.querySelector('.alvosAtingidos')
 let tipoTritao
 let movimentoTritao
 let movimentoEstilingue
+let jogoIniciado = false
+let pontuacao
 const Musiquinha = new Audio ('./audios/audioBackground.mp3')
 const somTiro = new Audio ('./audios/tiro-som.mp3')
 const somAcerto = new Audio ('./audios/tiro-quando-acerta.mp3')
@@ -29,7 +31,6 @@ const hit4 = new Audio ('./audios/hit_sound4.mp3')
 const som_pulo = new Audio ('./audios/jump_sound.mp3')
 const som_morte = new Audio ('./audios/death_sound.mp3')
 const pegandoItem = new Audio ('./audios/pegandoMunicao.mp3')
-
 let tritaoMatados = 0
 atingidos.textContent = `${tritaoMatados}`
 
@@ -49,6 +50,9 @@ const pulo = () => {
 }}
 
 function iniciarJogo() {
+    pontuacao = 0
+    const pontuacaoElement = document.getElementById('scoreboard')
+    pontuacaoElement.textContent = `${pontuacao}`
     tritaoMatados = 0
     atingidos.textContent = `${tritaoMatados}`
     Musiquinha.play()
@@ -63,6 +67,7 @@ function iniciarJogo() {
     quantidadeBalas = 3
     loop = true
     perdeu = false
+    jogoIniciado = true
     municao.textContent = `${quantidadeBalas}`
     vida1.src = "./images/vida_cheia.webp"
     vida2.src = "./images/vida_cheia.webp"
@@ -70,6 +75,7 @@ function iniciarJogo() {
     vida4.src = "./images/vida_cheia.webp"
     vida5.src = "./images/vida_cheia.webp"
     tipoTritao = 0
+    // let jogoPausado = false
 
     SpawnIstilingue = setInterval(()=> {
         
@@ -99,6 +105,23 @@ function iniciarJogo() {
     
         }                   
     }, 10)
+
+    const startPontuacao = setInterval(()=> {
+        if(!jogoIniciado){
+            pontuacao ++
+            pontuacaoElement.textContent = `${pontuacao}`
+        }else {
+            jogoIniciado = false
+        }
+    }, 1000)
+
+   
+    if(jogoIniciado) {
+        clearInterval(startPontuacao)
+        console.log('foi')
+        jogoIniciado = false
+    }
+    
 
     loop = setInterval(() => {
         let movimentoTritao = tritao.offsetLeft;
@@ -152,6 +175,8 @@ function iniciarJogo() {
             perdeu = true
             vida1.src = "./images/vida_perdida.png"
             clearInterval(SpawnIstilingue)
+            pontuacao = 0
+            clearInterval(startPontuacao)
             estilingue.style.left = `${movimentoEstilingue}px`
             console.log(movimentoEstilingue)
             som_morte.play()
@@ -213,6 +238,32 @@ function iniciarJogo() {
                 if (movimentoTritao < -40){
                     tipoTritao ++
                 }
+
+        // function pausar() {
+        //     if(!jogoPausado){
+        //         clearInterval(loop)
+        //         tritao.style.left = `${movimentoTritao}px`;
+        //         usopp.classList.add('usopp_abatido')
+        //         usopp.style.bottom = `${usoppY}px`;
+        //         usopp.classList.remove('pulo');
+        //         usopp.classList.remove('hit');
+        //         clearInterval(SpawnIstilingue)
+        //         estilingue.style.left = `${movimentoEstilingue}px`
+        //         jogoPausado = true
+        //     }          
+        // }        
+        // function despausar() {
+        //     if(jogoPausado) {
+
+        //     }
+        // }
+        // document.addEventListener('keydown',(event) => {
+        //     switch(event.key){
+        //         case 'ArrowLeft':
+        //         pausar()
+        //         break;    
+        //     } 
+        // })      
     }, 10)
 }
 
@@ -241,12 +292,10 @@ function atirar() {
     tela.appendChild(tiro)
     quantidadeBalas --
     somTiro.play()
-
     const usoppHitbox = usopp.getBoundingClientRect()
+    const telaRect = tela.getBoundingClientRect()
     tiro.style.left = (usoppHitbox.width + usoppHitbox.width) + 'px'
-    tiro.style.top = (telaHeight - usoppHitbox.height) + 'px'
-    console.log(tiro.style.top)
-    console.log(usoppHitbox)
+    tiro.style.bottom = (telaRect.bottom - usoppHitbox.bottom + (usoppHitbox.height / 2)) + 'px'
     const loopTiros = setInterval(() => {
         const tiroColisao = tiro.getBoundingClientRect();
         const colisaoTritao = tritao.getBoundingClientRect();
@@ -276,7 +325,9 @@ function atirar() {
         }
     }, 10)
 
+
 }
+
 
 
 
@@ -295,6 +346,10 @@ document.addEventListener('keydown', (event) =>{
 
     case 'ArrowDown':
     atirar()
+    break;
+
+    case 'ArrowLeft':
+    pausar()
     break;
     }
 }); //depois do evento, executa a função pulo
