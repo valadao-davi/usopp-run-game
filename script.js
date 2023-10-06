@@ -54,7 +54,7 @@ const pulo = () => {
 
 function iniciarPontuacao() {
     if(!jogoIniciado){
-        intervaloPontuacao = setInterval(atualizarPontuacao, 100)
+        intervaloPontuacao = setInterval(atualizarPontuacao, 50)
     }
 }
 function reniciarPontuacao() {
@@ -71,11 +71,26 @@ function reniciarPontuacao() {
 function atualizarPontuacao() {
     if(vidas>0){
         pontuacao = pontuacao + 1
-        pontuacaoElement.textContent = `${pontuacao}`
+        pontuacaoElement.textContent = `Score: ${pontuacao}`
     }
     
 }
-
+function telaDerrota() {
+    const telaDerrota = document.createElement('div')
+    telaDerrota.classList.add('derrotaDiv')
+    telaDerrota.innerHTML = `
+    <h1>Oh não você perdeu! Aperte enter para tentar novamente!</h1>
+    <h1>Sua pontuação final foi: ${pontuacao} </h1>
+   `
+    tela.appendChild(telaDerrota)
+    document.addEventListener('keydown',(event) => {
+       switch(event.key){
+        case 'Enter':
+        tela.removeChild(telaDerrota)
+        break;    
+        } 
+    })  
+}
 
 
 function iniciarJogo() {
@@ -105,8 +120,8 @@ function iniciarJogo() {
     vida5.src = "./images/vida_cheia.webp"
     tipoTritao = 0
 
+
     SpawnIstilingue = setInterval(()=> {
-        
         let movimentoEstilingue = estilingue.offsetLeft
         estilingue.classList.add('movimento_estilingue')
         if(movimentoEstilingue < -30) {
@@ -143,7 +158,6 @@ function iniciarJogo() {
         municao.textContent = `${quantidadeBalas}`
         movimentoEstilingue = estilingue.offsetLeft
 
-
         if(movimentoTritao < 180 && usoppY < 60 && movimentoTritao > 0){
             tritao.classList.remove('movimento_tritao')
             vidas --
@@ -169,10 +183,10 @@ function iniciarJogo() {
         }
 
         
-        if(tritaoMatados >= 4) {
-            tritaoMatados --
-            tritaoMatados = 0
-        }
+        // if(tritaoMatados >= 4) {
+        //     tritaoMatados --
+        //     tritaoMatados = 0
+        // }
         if (vidas <= 0) {
             clearInterval(loop)
             tritao.style.left = `${movimentoTritao}px`;
@@ -186,9 +200,7 @@ function iniciarJogo() {
             clearInterval(SpawnIstilingue)
             clearInterval(intervaloPontuacao)
             estilingue.style.left = `${movimentoEstilingue}px`
-            
-            pontuacaoElement = `${pontuacao}`
-            congelarPontuacao()
+            telaDerrota()
             som_morte.play()
             return tipoTritao
             
@@ -324,6 +336,7 @@ function atirar() {
             tiroColisao.top < colisaoTritao.bottom &&
             tiroColisao.bottom > colisaoTritao.top
         ){
+            pontuacao += 100
             console.log("atingiu")
             somAcerto.play()
             tritaoMatados ++
