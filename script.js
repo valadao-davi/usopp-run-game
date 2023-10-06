@@ -21,6 +21,7 @@ let movimentoTritao
 let movimentoEstilingue
 let jogoIniciado = false
 let pontuacao
+const pontuacaoElement = document.getElementById('scoreboard')
 const Musiquinha = new Audio ('./audios/audioBackground.mp3')
 const somTiro = new Audio ('./audios/tiro-som.mp3')
 const somAcerto = new Audio ('./audios/tiro-quando-acerta.mp3')
@@ -33,6 +34,7 @@ const som_morte = new Audio ('./audios/death_sound.mp3')
 const pegandoItem = new Audio ('./audios/pegandoMunicao.mp3')
 let tritaoMatados = 0
 atingidos.textContent = `${tritaoMatados}`
+let intervaloPontuacao;
 
 usopp.src = './images/usopp_pose.png'
 
@@ -49,10 +51,38 @@ const pulo = () => {
     }, 750); //depois do tempo em milisegundos, remove o pulo para poder executar novamente
 }}
 
+
+function iniciarPontuacao() {
+    if(!jogoIniciado){
+        intervaloPontuacao = setInterval(atualizarPontuacao, 100)
+    }
+}
+function reniciarPontuacao() {
+    if(jogoIniciado) {
+        clearInterval(intervaloPontuacao)
+        pontuacao = 0
+        console.log('reniciado')
+        jogoIniciado = false
+    }else{
+        jogoIniciado = false
+    }
+}
+
+function atualizarPontuacao() {
+    if(vidas>0){
+        pontuacao = pontuacao + 1
+        pontuacaoElement.textContent = `${pontuacao}`
+    }
+    
+}
+
+
+
 function iniciarJogo() {
+    jogoIniciado = true
     pontuacao = 0
-    const pontuacaoElement = document.getElementById('scoreboard')
     pontuacaoElement.textContent = `${pontuacao}`
+    reniciarPontuacao()
     tritaoMatados = 0
     atingidos.textContent = `${tritaoMatados}`
     Musiquinha.play()
@@ -67,7 +97,6 @@ function iniciarJogo() {
     quantidadeBalas = 3
     loop = true
     perdeu = false
-    jogoIniciado = true
     municao.textContent = `${quantidadeBalas}`
     vida1.src = "./images/vida_cheia.webp"
     vida2.src = "./images/vida_cheia.webp"
@@ -75,7 +104,6 @@ function iniciarJogo() {
     vida4.src = "./images/vida_cheia.webp"
     vida5.src = "./images/vida_cheia.webp"
     tipoTritao = 0
-    // let jogoPausado = false
 
     SpawnIstilingue = setInterval(()=> {
         
@@ -106,22 +134,7 @@ function iniciarJogo() {
         }                   
     }, 10)
 
-    const startPontuacao = setInterval(()=> {
-        if(!jogoIniciado){
-            pontuacao ++
-            pontuacaoElement.textContent = `${pontuacao}`
-        }else {
-            jogoIniciado = false
-        }
-    }, 1000)
-
    
-    if(jogoIniciado) {
-        clearInterval(startPontuacao)
-        console.log('foi')
-        jogoIniciado = false
-    }
-    
 
     loop = setInterval(() => {
         let movimentoTritao = tritao.offsetLeft;
@@ -155,11 +168,7 @@ function iniciarJogo() {
             
         }
 
-        /*
-        if (movimentoTritao < 180 && usoppY > 60 && movimentoTritao > 0) {
-            quantidadeBalas ++
-        }
-        */
+        
         if(tritaoMatados >= 4) {
             tritaoMatados --
             tritaoMatados = 0
@@ -167,7 +176,7 @@ function iniciarJogo() {
         if (vidas <= 0) {
             clearInterval(loop)
             tritao.style.left = `${movimentoTritao}px`;
-            usopp.src = "/images/usopp_bateu.png"
+            usopp.src = "./images/usopp_bateu.png"
             usopp.classList.add('usopp_abatido')
             usopp.style.bottom = `${usoppY}px`;
             usopp.classList.remove('pulo');
@@ -175,10 +184,11 @@ function iniciarJogo() {
             perdeu = true
             vida1.src = "./images/vida_perdida.png"
             clearInterval(SpawnIstilingue)
-            pontuacao = 0
-            clearInterval(startPontuacao)
+            clearInterval(intervaloPontuacao)
             estilingue.style.left = `${movimentoEstilingue}px`
-            console.log(movimentoEstilingue)
+            
+            pontuacaoElement = `${pontuacao}`
+            congelarPontuacao()
             som_morte.play()
             return tipoTritao
             
@@ -340,6 +350,7 @@ document.addEventListener('keydown', (event) =>{
 
     case 'Enter':
     iniciarJogo()
+    iniciarPontuacao()
     tritao.style.left = "auto";
     estilingue.style.left = 'auto'
     break;
