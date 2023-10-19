@@ -6,7 +6,7 @@ const telaHeight = tela.clientHeight
 let podeAtirar = true
 let tiroDisponivel
 let vidas
-let quantidadeBalas
+let quantidadeBalas = 0
 let perdeu = false
 let vida1 = document.querySelector("#vida1")
 let vida2 = document.querySelector("#vida2")
@@ -14,8 +14,10 @@ let vida3 = document.querySelector("#vida3")
 let vida4 = document.querySelector("#vida4")
 let vida5 = document.querySelector("#vida5")
 const municao = document.querySelector('.municao')
+municao.textContent = quantidadeBalas
 const estilingue = document.querySelector('.estilingue')
 const atingidos = document.querySelector('.alvosAtingidos')
+const mensagemInicial = document.querySelector('.telaInicial')
 let tipoTritao
 let movimentoTritao
 let movimentoEstilingue
@@ -35,7 +37,6 @@ const pegandoItem = new Audio ('./audios/pegandoMunicao.mp3')
 let tritaoMatados = 0
 atingidos.textContent = `${tritaoMatados}`
 let intervaloPontuacao;
-
 usopp.src = './images/usopp_pose.png'
 
 const pulo = () => {
@@ -61,7 +62,6 @@ function reniciarPontuacao() {
     if(jogoIniciado) {
         clearInterval(intervaloPontuacao)
         pontuacao = 0
-        console.log('reniciado')
         jogoIniciado = false
     }else{
         jogoIniciado = false
@@ -94,6 +94,9 @@ function telaDerrota() {
 
 
 function iniciarJogo() {
+    mensagemInicial.style.display = 'none'
+    estilingue.style.display = 'block'
+    pontuacaoElement.style.display = 'block'
     jogoIniciado = true
     pontuacao = 0
     pontuacaoElement.textContent = `${pontuacao}`
@@ -124,14 +127,23 @@ function iniciarJogo() {
     SpawnIstilingue = setInterval(()=> {
         let movimentoEstilingue = estilingue.offsetLeft
         estilingue.classList.add('movimento_estilingue')
-        if(movimentoEstilingue < -30) {
+        
+        // 
+        
+        if(movimentoEstilingue < -50) {
             estilingue.style.bottom = Math.random() * 180 + 'px'
+            estilingue.style.display = 'none'
+            estilingue.classList.remove('movimento_estilingue')
+            aparicaoEstilingueParede = setTimeout(()=> {
+                estilingue.classList.add('movimento_estilingue')
+                estilingue.style.display = 'block'
+            }, 9000)
         }
         const usoppHitbox = usopp.getBoundingClientRect();
         const estilingueHitbox = estilingue.getBoundingClientRect();
         if (
-            estilingueHitbox.left <  usoppHitbox.right &&
-            estilingueHitbox.right >  usoppHitbox.left &&
+            estilingueHitbox.left < usoppHitbox.right &&
+            estilingueHitbox.right > usoppHitbox.left &&
             estilingueHitbox.top < usoppHitbox.bottom &&
             estilingueHitbox.bottom > usoppHitbox.top
         ) {
@@ -140,13 +152,15 @@ function iniciarJogo() {
             pegandoItem.play()
             estilingue.classList.remove('movimento_estilingue')
             estilingue.style.display = 'none'
-            setTimeout(()=> {
+            estilingue.style.bottom = Math.random() * 180 + 'px'
+            aparicaoEstilingue = setTimeout(()=> {
                 estilingue.classList.add('movimento_estilingue')
                 estilingue.style.display = 'block'
-            }, 10000)
+            }, 9000)
                 
     
-        }                   
+        }
+
     }, 10)
 
    
@@ -156,7 +170,7 @@ function iniciarJogo() {
         const usoppY = +window.getComputedStyle(usopp).bottom.replace('px', '')
         tritao.classList.add('movimento_tritao')
         municao.textContent = `${quantidadeBalas}`
-        movimentoEstilingue = estilingue.offsetLeft
+        movimentoEstilingue = estilingue.offsetLeft  
 
         if(movimentoTritao < 180 && usoppY < 60 && movimentoTritao > 0){
             tritao.classList.remove('movimento_tritao')
@@ -167,13 +181,10 @@ function iniciarJogo() {
                 hit4.play()
             } else if (vidas == 2) {
                 hit2.play()
-            } else if (vidas == 0) {
-
             }
             usopp.classList.add('hit')
             usopp.style.bottom = `${usoppY}px`;
             tipoTritao ++
-            console.log(tipoTritao)
             setTimeout(() => {
                 usopp.classList.remove('hit');
                 usopp.style.bottom = `0px`;
@@ -187,8 +198,11 @@ function iniciarJogo() {
         //     tritaoMatados --
         //     tritaoMatados = 0
         // }
+        if (tipoTritao >= 5){
+            tipoTritao = 0
+        }
         if (vidas <= 0) {
-            clearInterval(loop)
+            
             tritao.style.left = `${movimentoTritao}px`;
             usopp.src = "./images/usopp_bateu.png"
             usopp.classList.add('usopp_abatido')
@@ -202,14 +216,16 @@ function iniciarJogo() {
             estilingue.style.left = `${movimentoEstilingue}px`
             telaDerrota()
             som_morte.play()
+            clearInterval(iniciarJogo)
+            clearInterval(loop)
+            clearInterval(SpawnIstilingue)
+            clearInterval(aparicaoEstilingue)
             return tipoTritao
             
     
         }
         
-        if (tipoTritao >= 5){
-            tipoTritao = 0
-        }
+        
         
         switch (tipoTritao){
 
@@ -261,31 +277,6 @@ function iniciarJogo() {
                     tipoTritao ++
                 }
 
-        // function pausar() {
-        //     if(!jogoPausado){
-        //         clearInterval(loop)
-        //         tritao.style.left = `${movimentoTritao}px`;
-        //         usopp.classList.add('usopp_abatido')
-        //         usopp.style.bottom = `${usoppY}px`;
-        //         usopp.classList.remove('pulo');
-        //         usopp.classList.remove('hit');
-        //         clearInterval(SpawnIstilingue)
-        //         estilingue.style.left = `${movimentoEstilingue}px`
-        //         jogoPausado = true
-        //     }          
-        // }        
-        // function despausar() {
-        //     if(jogoPausado) {
-
-        //     }
-        // }
-        // document.addEventListener('keydown',(event) => {
-        //     switch(event.key){
-        //         case 'ArrowLeft':
-        //         pausar()
-        //         break;    
-        //     } 
-        // })      
     }, 10)
 }
 
@@ -337,12 +328,10 @@ function atirar() {
             tiroColisao.bottom > colisaoTritao.top
         ){
             pontuacao += 100
-            console.log("atingiu")
             somAcerto.play()
             tritaoMatados ++
             atingidos.textContent = `${tritaoMatados}`
             tipoTritao ++
-            console.log(tritaoMatados)
             tritao.classList.remove('movimento_tritao')
             tela.removeChild(tiro)
         }
