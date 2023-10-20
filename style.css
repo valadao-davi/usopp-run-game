@@ -15,8 +15,23 @@ body {
     background-image: url(./images/background.png);
     background-size: cover;
     background-position: bottom;
+    flex-direction: column;
 }
-
+.nextLevel{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+    background-color: #472f26f7;
+    border-radius: 16px;
+    color: white;
+    width: 150px;
+    justify-content: center;
+}
+#forward{
+    width: 100px;
+    height: 100px;
+}
 .tela {
     width: 1000px;
     height: 500px;

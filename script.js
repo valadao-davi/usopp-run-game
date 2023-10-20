@@ -23,6 +23,7 @@ let movimentoTritao
 let movimentoEstilingue
 let jogoIniciado = false
 let pontuacao
+let ganhar = false
 const pontuacaoElement = document.getElementById('scoreboard')
 const Musiquinha = new Audio ('./audios/audioBackground.mp3')
 const somTiro = new Audio ('./audios/tiro-som.mp3')
@@ -75,6 +76,8 @@ function atualizarPontuacao() {
     }
     
 }
+
+
 function telaDerrota() {
     const telaDerrota = document.createElement('div')
     telaDerrota.classList.add('derrotaDiv')
@@ -92,6 +95,28 @@ function telaDerrota() {
     })  
 }
 
+function proximoNivel(){
+    const botaoNext = document.createElement('div')
+    botaoNext.classList.add('nextLevel')
+    botaoNext.innerHTML = `
+    <div class="nextLevel">
+        <img id="forward"src="./images/409997-small-removebg-preview.png" alt="">
+    </div>`
+    document.body.appendChild(botaoNext)
+    botaoNext.addEventListener('click',(event)=> {
+        window.location.href = ('./level2.html')
+    })
+}
+
+function verificarNivel(){
+    verNivel = setInterval(()=> {
+        if(ganhar == false & tritaoMatados> 10 & pontuacao > 1000){
+            proximoNivel()
+            ganhar = true
+            clearInterval(verNivel)
+        }   
+    }, 10)
+}
 
 function iniciarJogo() {
     mensagemInicial.style.display = 'none'
@@ -122,7 +147,7 @@ function iniciarJogo() {
     vida4.src = "./images/vida_cheia.webp"
     vida5.src = "./images/vida_cheia.webp"
     tipoTritao = 0
-
+    verificarNivel()
 
     SpawnIstilingue = setInterval(()=> {
         let movimentoEstilingue = estilingue.offsetLeft
@@ -193,11 +218,6 @@ function iniciarJogo() {
             
         }
 
-        
-        // if(tritaoMatados >= 4) {
-        //     tritaoMatados --
-        //     tritaoMatados = 0
-        // }
         if (tipoTritao >= 5){
             tipoTritao = 0
         }
