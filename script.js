@@ -7,7 +7,7 @@ let podeAtirar = true
 let tiroDisponivel
 let vidas
 let quantidadeBalas = 0
-let perdeu = false
+let perdeu = true
 let vida1 = document.querySelector("#vida1")
 let vida2 = document.querySelector("#vida2")
 let vida3 = document.querySelector("#vida3")
@@ -105,7 +105,7 @@ function iniciarJogo() {
     atingidos.textContent = `${tritaoMatados}`
     Musiquinha.play()
     Musiquinha.loop = true;
-    Musiquinha.volume = 0.4
+    Musiquinha.volume = 0.7
     usopp.src = './images/usopp_run.gif'
     usopp.style.bottom = `0px`;
     vidas = 5
@@ -113,7 +113,6 @@ function iniciarJogo() {
     estilingue.classList.remove('movimento_estilingue')
     usopp.classList.remove('usopp_abatido')
     quantidadeBalas = 3
-    loop = true
     perdeu = false
     municao.textContent = `${quantidadeBalas}`
     vida1.src = "./images/vida_cheia.webp"
