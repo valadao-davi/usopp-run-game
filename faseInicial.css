@@ -1,0 +1,265 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'NicoClean';
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap');
+
+body {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    font-family:'Pixelify Sans', cursive;
+    background-image: url(./images/background.png);
+    background-size: cover;
+    background-position: bottom;
+    flex-direction: column;
+}
+.nextLevel{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+    background-color: #472f26f7;
+    border-radius: 16px;
+    color: white;
+    width: 150px;
+    justify-content: center;
+}
+#forward{
+    width: 100px;
+    height: 100px;
+}
+.tela {
+    width: 1000px;
+    height: 500px;
+    position: relative;
+    display: flex;
+    margin: auto;
+    border: 2px #333 solid;
+    overflow: hidden;
+    background-image: url(./images/16th_Branch_Infobox.webp);
+    background-size: cover;
+}
+
+.tritao {
+    position: absolute;
+    bottom: 0;
+    transform: scaleX(-1);
+    height: 110px;
+    right: 0;
+}
+
+.usopp {
+    position: absolute;
+    height: 80px;
+    bottom: 0;
+    left: 100px;
+    transform: scaleX(-1);
+}
+
+.vidas{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.vida_cheia {
+    width: 30px;
+}
+.vida_perdida {
+    width: 30px;
+}
+
+.usopp_abatido {
+    margin-left: 21.65px;
+}
+
+.pulo {
+    animation: pulo 750ms linear;
+}
+
+.movimento_tritao {
+    animation: movimento_tritao 2.5s linear infinite;
+}
+
+.hit {
+    animation: hit 325ms steps(5);
+}
+
+.tiro {
+    position: absolute;
+    background-image: url(./images/bala.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 12px;
+    height: 12px;
+}
+
+.municao_items{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    position: absolute;
+    align-items: center;
+    top: 10px;
+    gap: 10px;
+    right: 10px;
+    padding: 4px 16px 4px 10px;
+    background-color: #472f26f7;
+    border-radius: 8px;
+    color: white;
+    font-weight: 700;
+}
+.img_municao{
+    width: 50px;
+    height: 50px;
+}
+.estilingue{
+    bottom: 100px;
+    right: 980px;
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    display: none;
+}
+.movimento_estilingue{
+    animation: movimento_estilingue 2s linear infinite;
+}
+
+.inimigosMatados { 
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    position: absolute;
+    align-items: center;
+    top: 100px;
+    gap: 10px;
+    left: 10px;
+    padding: 4px 16px 4px 10px;
+    background-color: #472f26f7;
+    border-radius: 8px;
+    color: white;
+    font-weight: 700;
+}
+.img_alvo {
+    width: 50px;
+    height: 50px;
+    filter: saturate(150%)
+}
+
+
+@keyframes pulo {
+    0% {
+        bottom: 0;
+    }
+    40% {
+        bottom: 180px;
+    }
+    50% {
+        bottom: 180px;
+    }
+    60% {
+        bottom: 180px;
+    }
+    100% {
+        bottom: 0;
+    }
+}
+
+@keyframes movimento_tritao {
+    from {
+        right: -65px;
+    }
+    to {
+        right: 100%;
+    }
+    
+}
+
+@keyframes movimento_estilingue {
+    from{
+        right: -65px;
+    }
+    to{
+        right: 100%;
+    }
+}
+
+@keyframes hit {
+    0% {
+        filter: invert(100%) sepia(100%) saturate(17%) hue-rotate(240deg) brightness(102%) contrast(100%);
+    }
+    20% {
+        filter: none;
+    }
+    40% {
+        filter: invert(100%) sepia(100%) saturate(17%) hue-rotate(240deg) brightness(102%) contrast(100%);
+    }
+    60% {
+        filter: none;
+    }
+    80% {
+        filter: invert(100%) sepia(100%) saturate(17%) hue-rotate(240deg) brightness(102%) contrast(100%);
+    }
+}
+
+#scoreboard{
+    flex-direction: row;
+    justify-content: center;
+    position: absolute;
+    align-items: center;
+    display: none;
+    top: 50px;
+    gap: 10px;
+    left: 10px;
+    padding: 12px 20px 8px 20px;
+    background-color: #472f26f7;
+    border-radius: 8px;
+    color: white;
+    font-weight: 700;
+}
+.derrotaDiv{
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    height: fit-content;
+    padding: 20px 16px 20px 16px;
+    background-color: #472f26f7;
+    border-radius: 8px;
+    color: white;
+    width: 80%;
+    text-align: center;
+    font-size: 12px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.telaInicial {
+    width: 70%;
+    height: 70%;
+    background-color: #472f26f7;
+    margin: auto;
+    color: whitesmoke;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    font-size: 20px;
+    line-height: 1.2;
+    border-radius: 24px;
+}
+
+.telaInicial h1 {
+    font-weight: normal;
+}
+.telaInicial p {
+    width: 80%;
+    text-align: center;
+}
