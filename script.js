@@ -52,7 +52,13 @@ const pulo = () => {
     }, 750); //depois do tempo em milisegundos, remove o pulo para poder executar novamente
 }}
 
-
+function atualizarPontuacao() {
+    if(vidas>0){
+        pontuacao = pontuacao + 1
+        pontuacaoElement.textContent = `Score: ${pontuacao}`
+    }
+    
+}
 function iniciarPontuacao() {
     if(!jogoIniciado){
         intervaloPontuacao = setInterval(atualizarPontuacao, 50)
@@ -68,59 +74,39 @@ function reniciarPontuacao() {
     }
 }
 
-function atualizarPontuacao() {
-    if(vidas>0){
-        pontuacao = pontuacao + 1
-        pontuacaoElement.textContent = `Score: ${pontuacao}`
-    }
-    
-}
-function telaDerrota() {
-    const telaDerrota = document.createElement('div')
-    telaDerrota.classList.add('derrotaDiv')
-    telaDerrota.innerHTML = `
-    <h1>Oh não você perdeu! Aperte enter para tentar novamente!</h1>
-    <h1>Sua pontuação final foi: ${pontuacao} </h1>
-   `
-    tela.appendChild(telaDerrota)
-    document.addEventListener('keydown',(event) => {
-       switch(event.key){
-        case 'Enter':
-        tela.removeChild(telaDerrota)
-        break;    
-        } 
-    })  
-}
-
 
 function iniciarJogo() {
-    mensagemInicial.style.display = 'none'
-    estilingue.style.display = 'block'
-    pontuacaoElement.style.display = 'block'
     jogoIniciado = true
+    perdeu = false
+    vidas = 5
+    reniciarPontuacao()
     pontuacao = 0
     pontuacaoElement.textContent = `${pontuacao}`
-    reniciarPontuacao()
+    quantidadeBalas = 3
+    municao.textContent = `${quantidadeBalas}`
+    tipoTritao = 0
     tritaoMatados = 0
     atingidos.textContent = `${tritaoMatados}`
     Musiquinha.play()
     Musiquinha.loop = true;
     Musiquinha.volume = 0.7
+    mensagemInicial.style.display = 'none'
+    estilingue.style.display = 'block'
+    pontuacaoElement.style.display = 'block'
+    
+   
     usopp.src = './images/usopp_run.gif'
     usopp.style.bottom = `0px`;
-    vidas = 5
     tritao.classList.remove('movimento_tritao')
     estilingue.classList.remove('movimento_estilingue')
     usopp.classList.remove('usopp_abatido')
-    quantidadeBalas = 3
-    perdeu = false
-    municao.textContent = `${quantidadeBalas}`
+    
     vida1.src = "./images/vida_cheia.webp"
     vida2.src = "./images/vida_cheia.webp"
     vida3.src = "./images/vida_cheia.webp"
     vida4.src = "./images/vida_cheia.webp"
     vida5.src = "./images/vida_cheia.webp"
-    tipoTritao = 0
+    
 
 
     SpawnIstilingue = setInterval(()=> {
@@ -340,7 +326,22 @@ function atirar() {
 }
 
 
-
+function telaDerrota() {
+    const telaDerrota = document.createElement('div')
+    telaDerrota.classList.add('derrotaDiv')
+    telaDerrota.innerHTML = `
+    <h1>Oh não você perdeu! Aperte enter para tentar novamente!</h1>
+    <h1>Sua pontuação final foi: ${pontuacao} </h1>
+   `
+    tela.appendChild(telaDerrota)
+    document.addEventListener('keydown',(event) => {
+       switch(event.key){
+        case 'Enter':
+        tela.removeChild(telaDerrota)
+        break;    
+        } 
+    })  
+}
 
 document.addEventListener('keydown', (event) =>{
     switch (event.key){
